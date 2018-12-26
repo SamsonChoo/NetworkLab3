@@ -16,6 +16,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ---
 ## Execution
 
+### How to run the program?
+Note: This guide assumes you already have all the required programs and libraries installed. If not, you may log in to the provided container with "ssh –p <LAST_5_DIGITS_OF_STUDENT_ID> root@140.113.195.69" and password "cn2018"(assuming that you are using Linux like me).
+
+  * Clone the repository
+  """ git clone https://github.com/nctucn/lab3-<GITHUB_ID>.git Route_Configuration """
 > TODO:
 > * How to run your program?
 > * What is the meaning of the executing command (both Mininet and Ryu controller)?
@@ -90,10 +95,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ---
 ## Contributors
 
-> TODO:
-> * Please replace "`YOUR_NAME`" and "`YOUR_GITHUB_LINK`" into yours
-
-* [YOUR_NAME](YOUR_GITHUB_LINK)
+* [Samson Choo](https://github.com/SamsonChoo)
 * [David Lu](https://github.com/yungshenglu)
 
 ---
