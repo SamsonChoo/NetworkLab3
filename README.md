@@ -87,19 +87,85 @@ git clone https://github.com/nctucn/lab3-<GITHUB_ID>.git Route_Configuration
 ## Description
 
 ### Tasks
-
-> TODO:
-> * Describe how you finish this work in detail
-
 1. Environment Setup
-
+  * Join the lab at https://classroom.github.com/a/RHNMq4Td
+  * Login to the container using SSH
+  ```
+  $ ssh –p 45079 root@140.113.195.69
+Password: cn2018
+  ```
+  * Clone the repository
+  ```
+  $ git clone https://github.com/nctucn/lab3-SamsonChoo.git Route_Configuration
+  ```
+  * Start the service of Open vSwitch
+  ```
+  $ [sudo] service openvswitch-switch start
+  ```
+  * Run mininet for testing
+  ```
+  $ [sudo] mn
+  mininet> exit
+  ```  
+&nbsp;
 2. Example of Ryu SDN
-
+  * Open new terminal and log in to the container (instructions above)
+  * Run SimpleTopo.py in one terminal at *Route_Configuration/src* (Refer to Notes above for how to traverse between directories)
+  ```
+  $ [sudo] mn --custom SimpleTopo.py --topo topo --link tc --controller remote
+  ```
+  * Run SimplteController.py in another terminal
+  ```
+  $ [sudo] ryu-manager SimpleController.py --observelinks
+  ```
+  * Leave the mininet CLI in the topo(first) terminal **first**, then exit in the controller(second) terminal with clean up. (Refer to Notes above for how to exit and clean up)
+&nbsp;
 3. Mininet Topology
-
+  * Duplicate the example code SimpleTopo.py and name it topo.py (in src directory)
+  ```
+  $ cp SimpleTopo.py topo.py
+  ```
+  * Use ```vim topo.py``` to edit the topology file
+  * Specify the link parameters of the 3 links between the 3 switches, at line 21~23
+    * Identify each link represented by each line of self.addLink() from the first two parameters
+    * add the bw (bandwidth), delay and loss parameters in self.addLink()
+    * bw is given in Mbits as integer, delay is given as string, loss is given in percentage as integer
+    * In command mode of vim, press "i" to enter insert mode and press "Esc" to go back to command mode
+    * In command mode of vim, enter ":wq" and press Enter to save and quit the file
+  * Test the new file. Repeat step 2 with topo.py instead of SimpleTopo.py
+&nbsp;
 4. Ryu Controller
-
+  * Duplicate the example code SimpleController.py and name it controller.py (in src directory)
+```
+$ cp SimpleController.py controller.py
+```
+  * Use `vim controller.py` to modify the forwarding rules
+    * Refer to SimpleTopo.py/topo.py to find out the src and destination port of each link
+    * Modify the forwarding rules at function switch_features_handler(self, ev) at line 68
+    * msg.datapath.id represents the switch to be configured
+    * in_port specifies in the input port
+    * parser.OFPActionOutput() specifies the output port
+    * Edit the lines above to add the forwarding rules, stating the input port, output port, and switch used
+    * Use "v" in command mode to make selection, "y" to copy, and "p" to paste after the cursor
+    * Remember to modify the comments too to show the correct flow
+    * Save and exit the file
+&nbsp;
 5. Measurement
+  * Repeat step 2 with topo.py instead of SimpleTopo.py, but do not exit mininet yet
+  * Use the following iPerf commands to measure the bandwidth in your network
+  ```
+  mininet> h1 iperf -s -u -i 1 –p 5566 > ./out/result1 &
+  mininet> h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
+  ```
+  * Leave topo.py then SimpleController.py, remember to clean up
+  * Repeat step 2 with topo.py instead of SimpleTopo.py and controller.py instead of SimpleController.py, but do not exit mininet yet
+  * Use the following iPerf commands to measure the bandwidth in your network
+  ```
+  mininet> h1 iperf -s -u -i 1 –p 5566 > ./out/result2 &
+  mininet> h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
+  ```
+  * Leave topo.py then SimpleController.py, remember to clean up
+  * Compare the performances
 
 ### Discussion
 
@@ -127,20 +193,8 @@ git clone https://github.com/nctucn/lab3-<GITHUB_ID>.git Route_Configuration
 
 ---
 ## References
-
-> TODO: 
-> * Please add your references in the following
-
 * **Ryu SDN**
-    * [Ryubook Documentation](https://osrg.github.io/ryu-book/en/html/)
-    * [Ryubook [PDF]](https://osrg.github.io/ryu-book/en/Ryubook.pdf)
-    * [Ryu 4.30 Documentation](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
-    * [Ryu Controller Tutorial](http://sdnhub.org/tutorials/ryu/)
-    * [OpenFlow 1.3 Switch Specification](https://www.opennetworking.org/wp-content/uploads/2014/10/openflow-spec-v1.3.0.pdf)
-    * [Ryubook 說明文件](https://osrg.github.io/ryu-book/zh_tw/html/)
-    * [GitHub - Ryu Controller 教學專案](https://github.com/OSE-Lab/Learning-SDN/blob/master/Controller/Ryu/README.md)
-    * [Ryu SDN 指南 – Pengfei Ni](https://feisky.gitbooks.io/sdn/sdn/ryu.html)
-    * [OpenFlow 通訊協定](https://osrg.github.io/ryu-book/zh_tw/html/openflow_protocol.html)
+    * [Ryu topology discovery](https://sdn-lab.com/2014/12/31/topology-discovery-with-ryu/)
 * **Mininet**
     * [Mininet Walkthrough](http://mininet.org/walkthrough/)
 * **Others**
