@@ -63,7 +63,7 @@ git clone https://github.com/nctucn/lab3-<GITHUB_ID>.git Route_Configuration
   * Use ```mn -c``` to do a clean up
 
 #### How to exit the controller program?
-  * Use ~Ctrl+Z~ to leave the mininet CLI
+  * Use *Ctrl+Z* to leave the mininet CLI
   * Use ```mn -c``` after exiting to do a clean up
 
 ### What is the meaning of the executing command (both Mininet and Ryu controller)?
