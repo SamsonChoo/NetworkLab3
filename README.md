@@ -169,9 +169,6 @@ $ cp SimpleController.py controller.py
 
 ### Discussion
 
-> TODO:
-> * Answer the following questions
-
 1. Describe the difference between packet-in and packet-out in detail.
 The Packet-in function transfers the received packets to the controller, while Packet-out transfers the packets forwarded by the controller from the specified port. The controller can use the Packet-In function to receive packets from the switch. The switch analyzes the received packets to learn the MAC address of the host and information about the connected port. After learning, the switch transfers the received packets. The switch investigates whether the destination MAC address of the packets belong to the learned host. Depending on the investigation results, the switch performs the following processing. If the host is already a learned host : Uses the Packet-Out function to transfer the packets from the connected port. If the host is unknown host : Use the Packet-Out function to perform flooding.
    
@@ -205,6 +202,7 @@ The second forwarding rule is better as it has a higher bandwidth and lower loss
 * **Ryu SDN**
     * [Ryu topology discovery](https://sdn-lab.com/2014/12/31/topology-discovery-with-ryu/)
     * [Ryu API Documentation](https://ryu.readthedocs.io/en/latest/api_ref.html)
+    * [Ryubook Switching Hub](https://osrg.github.io/ryu-book/en/html/switching_hub.html)
 * **Mininet**
     * [Mininet Walkthrough](http://mininet.org/walkthrough/)
 * **Others**
