@@ -63,7 +63,7 @@ git clone https://github.com/nctucn/lab3-<GITHUB_ID>.git Route_Configuration
   * Use ```mn -c``` to do a clean up
 
 #### How to exit the controller program?
-  * Use *Ctrl+Z* to leave the mininet CLI
+  * Use ~Ctrl+Z~ to leave the mininet CLI
   * Use ```mn -c``` after exiting to do a clean up
 
 ### What is the meaning of the executing command (both Mininet and Ryu controller)?
@@ -114,7 +114,7 @@ Password: cn2018
   ```
   $ [sudo] mn --custom SimpleTopo.py --topo topo --link tc --controller remote
   ```
-  * Run SimplteController.py in another terminal
+  * Run SimpleController.py in another terminal
   ```
   $ [sudo] ryu-manager SimpleController.py --observelinks
   ```
@@ -173,33 +173,46 @@ $ cp SimpleController.py controller.py
 > * Answer the following questions
 
 1. Describe the difference between packet-in and packet-out in detail.
+The Packet-in function transfers the received packets to the controller, while Packet-out transfers the packets forwarded by the controller from the specified port. The controller can use the Packet-In function to receive packets from the switch. The switch analyzes the received packets to learn the MAC address of the host and information about the connected port. After learning, the switch transfers the received packets. The switch investigates whether the destination MAC address of the packets belong to the learned host. Depending on the investigation results, the switch performs the following processing. If the host is already a learned host : Uses the Packet-Out function to transfer the packets from the connected port. If the host is unknown host : Use the Packet-Out function to perform flooding.
    
 2. What is “table-miss” in SDN?
-   
+  Every flow table must support a table-miss flow entry to process table misses. The table-miss flow entry specifies how to process packets unmatched by other flow entries in the flow table (see 5.1), and may, for example, send packets to the controller, drop packets or direct packets to a subsequent table. It has a priority of 0 and a match of anything. It’s like a catch-all, and the actions to be taken depend on how you configure it. 
+
+
 3. Why is "`(app_manager.RyuApp)`" adding after the declaration of class in `controller.py`?
+  The declaration makes the class a Ryu Application. A Ryu application is a python module which defines a subclass of ryu.base.app_manager.RyuApp. The ryu.base.app_manager is the central management of Ryu applications. It loads Ryu applications, provides contexts to Ryu applications and route messages among Ryu applications. The ryu.base.app_manager.RyuApp is the base class for Ryu applications, and RyuApp subclasses are instantiated after ryu-manager loaded all requested Ryu application modules.
    
 4. Explain the following code in `controller.py`.
     ```python
-    @set_ev_cls(ofp_event.EventOFPPacketIn, CONFIG_DISPATCHER)
+    @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     ```
+    The line above is a python decarator, as indicated by the "@" sign. A Python decorator is a specific change to the Python syntax that allows us to more conveniently alter functions and methods. The decorator here is defined in https://github.com/osrg/ryu/blob/master/ryu/controller/handler.py. Basically, it associates that function (packet_in_handler) with an event class (ofp_event.EventOFPPacketIn), so that when Ryu receives an *EventOFPPacketIn*, it calls packet_in_handler. The second parameter *Dispatcher*, none by default, indicates the negotiation phase for which events should be generated for this handler. In this case, "MAIN_DISPATCHER" indicates that "Switch-features message received and sent set-config message".
 
 5. What is the meaning of “datapath” in `controller.py`?
-   
+datapath comes from msg.datapath, which is a ryu.controller.controller.Datapath instance that describes an OpenFlow switch from which we received this OpenFlow message.
+
 6. Why need to set "`ip_proto=17`" in the flow entry?
+IP Protocol 17 means the next level protocol being used is UDP.
    
 7. Compare the differences between the iPerf results of `SimpleController.py` and `controller.py` in detail.
+The iPerf results Result1 and Result2 both showed similar glitter and bandwidth, as iPerf uses its own pre-defined bandwidth for testing instead of the user-defined bandwidth in the topology. However, Result2 clearly shows a lower loss rate(2.6%) than Result1(4%), a consistent observation from multiple trials.
    
 8. Which forwarding rule is better? Why?
+The second forwarding rule is better as it has a higher bandwidth and lower loss rate. This is because it utilised switch 2 which has higher performance links with s1 and s3. This shows that the path with the least hop is not necessarily the best path.
 
 ---
 ## References
 * **Ryu SDN**
     * [Ryu topology discovery](https://sdn-lab.com/2014/12/31/topology-discovery-with-ryu/)
+    * [Ryu API Documentation](https://ryu.readthedocs.io/en/latest/api_ref.html)
 * **Mininet**
     * [Mininet Walkthrough](http://mininet.org/walkthrough/)
 * **Others**
     * [Markdown Tutorial](https://guides.github.com/features/mastering-markdown/)
     * [Vim Cheatsheet](https://www.maketecheasier.com/vim-keyboard-shortcuts-cheatsheet/)
+    * [OpenFlowSwitch Specification](https://www.opennetworking.org/wp-content/uploads/2014/10/openflow-spec-v1.4.0.pdf)
+    * [Python Decorators](https://wiki.python.org/moin/PythonDecorators)
+    * [Protocol Numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)
 
 ---
 ## Contributors
